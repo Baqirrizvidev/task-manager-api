@@ -3,23 +3,21 @@ const app = express();
 
 app.use(express.json());
 
-// In-memory store 
+// In-memory store
 let taskList = [];
 let idCounter = 1;
 
 // --- Task Routes ---
 
-// Get all tasks (with bonus filters) [cite: 8, 14]
+// Get all tasks (with bonus filters)
 app.get('/tasks', (req, res) => {
     let tasks = [...taskList];
     const { status, sort } = req.query;
 
-    // Filter by status 
     if (status) {
         tasks = tasks.filter(t => t.status === status);
     }
 
-    // Sort by creation time 
     if (sort === 'createdAt') {
         tasks.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
     }
@@ -27,11 +25,10 @@ app.get('/tasks', (req, res) => {
     res.json(tasks);
 });
 
-// Create a task [cite: 8]
+// Create a task
 app.post('/tasks', (req, res) => {
     const { title, description } = req.body;
 
-    // Validation: Title is required 
     if (!title) {
         return res.status(400).json({ message: "Missing required field: title" });
     }
@@ -40,7 +37,7 @@ app.post('/tasks', (req, res) => {
         id: idCounter++,
         title: title,
         description: description || "",
-        status: "pending", // Default status 
+        status: "pending",
         createdAt: new Date().toISOString()
     };
 
@@ -48,32 +45,31 @@ app.post('/tasks', (req, res) => {
     res.status(201).json(newTask);
 });
 
-// Get task by ID [cite: 8]
+// Get task by ID
 app.get('/tasks/:id', (req, res) => {
     const task = taskList.find(t => t.id === parseInt(req.params.id));
     
     if (!task) {
-        return res.status(404).json({ message: "No task found with that ID" }); [cite: 12]
+        return res.status(404).json({ message: "No task found with that ID" });
     }
     
     res.json(task);
 });
 
-// Update title/description [cite: 8]
+// Update title/description
 app.put('/tasks/:id', (req, res) => {
     const task = taskList.find(t => t.id === parseInt(req.params.id));
     if (!task) return res.status(404).json({ message: "Task not found" });
 
     const { title, description } = req.body;
     
-    // We only update if fields are actually provided
     if (title) task.title = title;
     if (description !== undefined) task.description = description;
 
     res.json(task);
 });
 
-// Mark task as done [cite: 8]
+// Mark task as done
 app.patch('/tasks/:id/done', (req, res) => {
     const task = taskList.find(t => t.id === parseInt(req.params.id));
     if (!task) return res.status(404).json({ message: "Task not found" });
@@ -82,7 +78,7 @@ app.patch('/tasks/:id/done', (req, res) => {
     res.json(task);
 });
 
-// Delete a task [cite: 8]
+// Delete a task
 app.delete('/tasks/:id', (req, res) => {
     const index = taskList.findIndex(t => t.id === parseInt(req.params.id));
     
@@ -94,8 +90,7 @@ app.delete('/tasks/:id', (req, res) => {
     res.status(200).json({ message: "Successfully removed task" });
 });
 
-// --- Bonus: Error Handling & 405s  ---
-
+// Bonus: Handle 405 Method Not Allowed
 app.all('/tasks', (req, res) => {
     res.status(405).json({ message: `Method ${req.method} not allowed on this route.` });
 });
@@ -103,7 +98,10 @@ app.all('/tasks', (req, res) => {
 app.all('/tasks/:id', (req, res) => {
     res.status(405).json({ message: `Method ${req.method} not allowed here.` });
 });
-
+// Root route so the home page isn't empty
+app.get('/', (req, res) => {
+    res.send('<h1>Task Manager API is running!</h1><p>Go to <a href="/tasks">/tasks</a> to see your data.</p>');
+});
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server started on http://localhost:${PORT}`);
