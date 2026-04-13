@@ -1,0 +1,13 @@
+{
+    "name": "task-manager-assignment",
+    "version": "0.1.0",
+    "description": "Simple Task Manager API - Code Submission",
+    "main": "index.js",
+    "scripts": {
+      "start": "node index.js"
+    },
+    "author": "Developer Applicant",
+    "dependencies": {
+      "express": "^4.18.2"
+    }
+  }
