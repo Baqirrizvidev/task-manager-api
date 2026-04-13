@@ -6,4 +6,4 @@ This is my implementation of the Task Manager REST API assignment. I built it us
 
 1. **Install dependencies**:
    ```bash
-   npm installn
+   npm install
