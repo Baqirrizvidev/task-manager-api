@@ -1,9 +1,5 @@
-# Personal Task Manager API
-
-This is my implementation of the Task Manager REST API assignment. I built it using Node.js and Express, opting for a clean, modular approach without an external database.
-
-## Getting Started
-
-1. **Install dependencies**:
-   ```bash
-   npm install
+Personal Task Manager APIThis project is a simple, in-memory REST API built for a personal Task Manager application. It allows users to manage their daily tasks with full CRUD (Create, Read, Update, Delete) functionality.🛠 Getting StartedPrerequisitesNode.js installed on your machine.InstallationClone or download this repository.Open your terminal in the project folder and run:Bashnpm install
+This will install the necessary dependencies, specifically Express.js.Running the ProjectTo launch the API, use the following command:Bashnpm start
+The server will run on http://localhost:3000.📡 API EndpointsThe following endpoints are available for task management:MethodEndpointDescriptionPOST/tasksCreate a new task with a title and optional description.GET/tasksRetrieve all tasks in the system.GET/tasks/:idGet the details of a single task by its unique ID.PUT/tasks/:idUpdate the title or description of an existing task.PATCH/tasks/:id/doneMark a specific task as completed.DELETE/tasks/:idPermanently remove a task from the list.💻 Example Requests (curl)Create a TaskBashcurl -X POST http://localhost:3000/tasks -H "Content-Type: application/json" -d '{"title": "Buy Milk", "description": "Get low-fat milk from the store"}'
+Get All Tasks (with Bonus Features)Default: curl http://localhost:3000/tasksFilter by Status : curl http://localhost:3000/tasks?status=pendingSort by Creation Date : curl http://localhost:3000/tasks?sort=createdAtMark a Task as DoneBashcurl -X PATCH http://localhost:3000/tasks/1/done
+📋 Data RequirementsEach task consists of the following fields:id: A unique, auto-generated number.title: The name of the task (Required).description: A short explanation of the task (Optional).status: Initialized as pending, can be updated to done.createdAt: A timestamp of when the task was created.⚠️ Validation and ErrorsThe API includes graceful error handling to ensure a smooth user experience:400 Bad Request: Returned if required fields (like the title) are missing or invalid.404 Not Found: Returned with a clear message if a task ID does not exist.405 Method Not Allowed: Returned for unsupported HTTP methods on valid routes (e.g., trying to DELETE the entire /tasks endpoint).📝 Technical NotesStorage: This project uses in-memory storage. No database is required; however, data will reset if the server is restarted.Code Quality: The code is structured for readability and maintainability, utilizing clean naming conventions and modular logic.
